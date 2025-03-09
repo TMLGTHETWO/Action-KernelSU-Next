@@ -82,7 +82,9 @@ jobs:
          sed -i 's/ -dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
          sed -i 's/ -dirty$//' kernel_platform/common/scripts/Makefile.modpost
          sed -i 's/ -dirty//g' kernel_platform/external/dtc/scripts/setlocalversion
-
+         sed -i 's/-dirty//' scripts/setlocalversion  # 直接删除所有-dirty标记
+         sed -i '/scm_version=$/a \    return' scripts/setlocalversion  # 跳过git版本检测
+         sed -i '/if test -n "$(git status --porcelain)"/a \    return' scripts/setlocalversion  # 跳过脏状态检查
       - name: Set up KernelSU Next
         if: github.event.inputs.KSUNEXT_ENABLED == 'true'
         run: |
